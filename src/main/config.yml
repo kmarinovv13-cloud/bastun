@@ -1,0 +1,88 @@
+# Magical Wand Configuration
+
+# Cooldown in seconds between wand uses
+cooldown-seconds: 60
+
+# Wand settings
+wand:
+  # Material used for the wand (default: BLAZE_ROD)
+  material: BLAZE_ROD
+  # Custom model data for each stage (for resource pack textures)
+  custom-model-data:
+    stage-1: 1001  # Novice - basic blaze rod
+    stage-2: 1002  # Adept - enhanced blaze rod
+    stage-3: 1003  # Master - master blaze rod
+
+# Stage 1 settings (Novice)
+stage1:
+  name: "Stage I - Novice"
+  color: GOLD
+  # Effects applied to target
+  target-effects: []
+
+# Stage 2 settings (Adept) - unlocked at 1 unique kill
+stage2:
+  name: "Stage II - Adept"
+  color: AQUA
+  # Effects applied to target
+  target-effects:
+    - type: SLOWNESS
+      level: 4
+      duration-seconds: 10
+    - type: BLINDNESS
+      level: 1
+      duration-seconds: 10
+
+# Stage 3 settings (Master) - unlocked at 3 unique kills
+stage3:
+  name: "Stage III - Master"
+  color: LIGHT_PURPLE
+  # Effects applied to target
+  target-effects:
+    - type: SLOWNESS
+      level: 4
+      duration-seconds: 10
+    - type: BLINDNESS
+      level: 1
+      duration-seconds: 10
+  # Effects applied to wielder
+  wielder-effects:
+    - type: STRENGTH
+      level: 3
+      duration-seconds: 10
+    - type: SPEED
+      level: 3
+      duration-seconds: 10
+
+# Visual effects
+effects:
+  # Lightning strike effect
+  lightning: true
+  # Particles when using wand
+  particles:
+    enabled: true
+    type: ELECTRIC_SPARK
+    count: 20
+  # Sounds
+  sounds:
+    enabled: true
+    use-sound: ITEM_TRIDENT_THUNDER
+    hit-sound: ENTITY_LIGHTNING_BOLT_THUNDER
+    upgrade-sound: ENTITY_PLAYER_LEVELUP
+    cooldown-ready-sound: UI_TOAST_CHALLENGE_COMPLETE
+
+# Messages
+messages:
+  prefix: "&6[MagicalWand] &r"
+  no-target: "&cNo target in range!"
+  on-cooldown: "&cWand is on cooldown! Wait &e%seconds% &cseconds."
+  wand-ready: "&aWand is ready!"
+  stage-upgraded: "&6Wand upgraded to &b%stage%&6! (Unique kills: &e%kills%&6)"
+  received-wand: "&aReceived Magical Wand &b%stage%&a!"
+  not-holding-wand: "&cYou're not holding a Magical Wand!"
+  wand-stage: "&6Wand Stage: &b%stage%"
+  unique-kills: "&6Unique Kills: &b%kills%"
+  config-reloaded: "&aConfig reloaded!"
+  cooldown-set: "&aWand cooldown set to &e%seconds% &aseconds!"
+  stage-set: "&aWand stage set to &b%stage%&a!"
+  no-permission: "&cYou don't have permission to use this command!"
