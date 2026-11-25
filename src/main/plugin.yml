@@ -1,0 +1,26 @@
+name: MagicalWand
+version: 1.0.0
+main: com.example.magicalwand.MagicalWandPlugin
+api-version: 1.21
+author: YourName
+description: A magical wand plugin with 3 stages that upgrade through PvP kills
+website: https://github.com/yourusername/magical-wand
+
+commands:
+  magicalwand:
+    description: Main command for Magical Wand
+    usage: /magicalwand <give|setstage|cooldown|check|reload>
+    aliases: [mw]
+    permission: magicalwand.use
+    permission-message: You don't have permission to use this command!
+
+permissions:
+  magicalwand.use:
+    description: Allows use of /magicalwand command
+    default: true
+  magicalwand.give:
+    description: Allows giving wands to players
+    default: op
+  magicalwand.admin:
+    description: Allows admin commands (setstage, cooldown, reload)
+    default: op
