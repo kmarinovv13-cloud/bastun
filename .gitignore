@@ -1,0 +1,43 @@
+# Build outputs
+target/
+*.jar
+*.war
+*.ear
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven
+.mvn/timing.properties
+maven.log
+
+# Logs
+*.log
+logs/
+
+# Plugin test server
+run/
+plugins/
+world/
+world_nether/
+world_the_end/
+server.properties
+bukkit.yml
+spigot.yml
+paper.yml
+commands.yml
+permissions.yml
+
+# Local config
+config.yml.local
