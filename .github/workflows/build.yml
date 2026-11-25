@@ -1,0 +1,117 @@
+name: Build MagicalWand Plugin
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build with Maven
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml -DskipTests
+
+      - name: Verify JAR
+        run: |
+          JAR_FILE=$(find target -name "magical-wand-*.jar" | grep -v sources | grep -v javadoc | head -1)
+          if [ -z "$JAR_FILE" ]; then
+            echo "No JAR file found!"
+            exit 1
+          fi
+          echo "Found JAR: $JAR_FILE"
+          ls -lh "$JAR_FILE"
+
+          # Verify plugin.yml exists in JAR
+          unzip -l "$JAR_FILE" | grep plugin.yml || {
+            echo "plugin.yml not found in JAR!"
+            exit 1
+          }
+
+          # Verify main class exists
+          unzip -l "$JAR_FILE" | grep "MagicalWandPlugin.class" || {
+            echo "Main class not found in JAR!"
+            exit 1
+          }
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: magical-wand-plugin
+          path: target/magical-wand-*.jar
+          retention-days: 30
+          if-no-files-found: error
+
+  release:
+    name: Create Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: magical-wand-plugin
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/*.jar
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run tests
+        run: mvn test
+
+# Optional: Dependency check
+  dependency-check:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Run dependency check
+        run: mvn dependency-check:check
+        continue-on-error: true
